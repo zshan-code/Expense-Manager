@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Expense Manager</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+<style>
+    body { font-family: 'Playfair Display', serif; }
+    input, button { font-family: 'Roboto', sans-serif; }
+    .form-container { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .form-container:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+    .error-message { opacity: 0; transform: translateY(-10px); transition: all 0.3s ease; }
+    .error-message.show { opacity: 1; transform: translateY(0); }
+    .shake { animation: shake 0.5s ease-in-out; }
+    @keyframes shake {
+        0%,100%{transform:translateX(0);}
+        20%,60%{transform:translateX(-8px);}
+        40%,80%{transform:translateX(8px);}
+    }
+</style>
+</head>
+<body class="bg-ivory-50 flex flex-col min-h-screen antialiased">
+
+<header class="bg-navy-900 text-ivory-100 p-6 shadow-md">
+    <h1 class="text-3xl font-semibold text-center tracking-tight">💲 Expense Management System</h1>
+</header>
+
+<main class="flex-grow flex justify-center items-center px-4 py-12">
+    <div class="bg-ivory-100 border border-navy-200 rounded-2xl shadow-xl w-full max-w-md p-8 form-container">
+        <h2 class="text-2xl font-semibold text-center text-navy-900 mb-8 tracking-wide">Sign In</h2>
+
+        <!-- Error Message -->
+        <div id="error-message" class="error-message {% if error_message %}show{% endif %} bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm">
+            <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span id="error-text">{{ error_message|default:'' }}</span>
+            </div>
+        </div>
+
+        <form method="POST" class="space-y-6" id="login-form">
+            {% csrf_token %}
+            <div>
+                <label class="block text-navy-800 font-medium mb-2 text-sm tracking-wide">Username</label>
+                <input type="text" name="username" id="username" placeholder="Enter your username" required
+                    class="w-full px-4 py-3 bg-ivory-50 border border-navy-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition duration-200 placeholder:text-navy-400">
+            </div>
+            <div>
+                <label class="block text-navy-800 font-medium mb-2 text-sm tracking-wide">Password</label>
+                <input type="password" name="password" id="password" placeholder="Enter your password" required
+                    class="w-full px-4 py-3 bg-ivory-50 border border-navy-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition duration-200 placeholder:text-navy-400">
+            </div>
+            <button type="submit" class="w-full bg-navy-900 text-ivory-100 py-3 rounded-lg hover:bg-navy-800 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:ring-offset-2 transition duration-200 font-medium tracking-wide text-sm">
+                Sign In
+            </button>
+        </form>
+    </div>
+</main>
+
+<footer class="bg-navy-900 text-ivory-100 text-center py-4 mt-auto">
+    <p class="text-sm tracking-wide">
+        © All Rights Reserved | Crafted by 
+        <a href="https://www.instagram.com/bye_zshan?igsh=a3VxcDNpZHVjZXF5&utm_source=qr" target="_blank" class="font-medium text-blue-500 hover:underline">Zshan</a>
+    </p>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('login-form');
+    const errorMessage = document.getElementById('error-message');
+
+    loginForm.addEventListener('submit', function(e) {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        if (!username || !password) {
+            e.preventDefault();
+            const errorText = errorMessage.querySelector('span');
+            errorText.textContent = 'Please fill in all fields';
+            errorMessage.classList.add('show');
+            loginForm.classList.add('shake');
+            setTimeout(() => loginForm.classList.remove('shake'), 500);
+        }
+    });
+});
+</script>
+
+</body>
+</html>

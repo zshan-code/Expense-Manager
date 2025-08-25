@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="flex flex-col min-h-screen bg-ivory-50 antialiased font-serif">
+
+    <!-- Header -->
+    <header class="bg-navy-900 text-ivory-100 p-6 shadow-md flex justify-between items-center">
+        <h1 class="text-3xl font-semibold tracking-tight">💲Expense Management System</h1>
+        <div class="flex items-center space-x-4">
+            <div id="clock" class="text-lg font-medium"></div>
+            <a href="{% url 'logout' %}" class="bg-navy-800 text-ivory-100 px-4 py-2 rounded-lg hover:bg-navy-700 transition duration-200 font-medium tracking-wide text-sm flex items-center">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="mr-2">
+                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                </svg>
+                Logout
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-12">
+        <div class="bg-ivory-100 border border-navy-200 rounded-2xl shadow-xl p-8">
+
+            <!-- Search and Filters -->
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8 space-y-4 md:space-y-0 md:space-x-4">
+                <input type="text" id="search-name" placeholder="Search by Name" class="w-full md:w-1/3 px-4 py-3 bg-ivory-50 border border-navy-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500 transition duration-200 placeholder:text-navy-400 text-sm">
+                
+                <!-- Filters and Actions -->
+                <div class="flex items-center space-x-3">
+                    <!-- Calendar Filter -->
+<div class="relative">
+    <input type="month" id="filter-calendar" class="w-full pl-10 pr-10 py-3 bg-ivory-50 border border-navy-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-gold-500 transition duration-200 text-sm text-navy-700 placeholder:text-navy-400 min-w-[180px] appearance-none cursor-pointer" placeholder="Select Month"> 
+    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-navy-500 pointer-events-none">
+        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+    </svg>
+    <button 
+        id="clear-calendar" 
+        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-navy-400 hover:text-navy-600 transition-colors duration-200 focus:outline-none"
+        title="Clear filter"
+    >
+        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+        </svg>
+    </button>
+</div>
+                    
+                    <!-- PDF Download Button -->
+                    <button id="download-pdf-btn" class="bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200 font-medium tracking-wide text-sm flex items-center">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="mr-2">
+                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                        </svg>
+                        PDF
+                    </button>
+                </div>
+                
+                <button id="add-transaction-btn" class="bg-navy-900 text-ivory-100 px-6 py-3 rounded-lg hover:bg-navy-800 focus:outline-none focus:ring-2 focus:ring-gold-500 transition duration-200 font-medium tracking-wide text-sm flex items-center">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="mr-2">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                    </svg>
+                    Add Transaction
+                </button>
+            </div>
+
+            <!-- Transactions Table -->
+            <div class="overflow-x-auto">
+                <table class="table-auto w-full bg-ivory-100 rounded-lg">
+                    <thead>
+                        <tr class="bg-navy-200 text-navy-900">
+                            <th class="px-6 py-3 text-left text-sm font-medium tracking-wide">Date</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium tracking-wide">Time</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium tracking-wide">Name</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium tracking-wide">Comment</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium tracking-wide">Received</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium tracking-wide">Paid</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium tracking-wide">Remaining Balance</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium tracking-wide">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactions-body">
+                        {% for t in transactions %}
+                        <tr class="hover:bg-navy-50 cursor-pointer transaction-row" data-details='{"id": "{{ t.id }}", "date": "{{ t.date }}", "time": "{{ t.time }}", "name": "{{ t.name }}", "comment": "{{ t.comment }}", "received": "{{ t.amount_received }}", "paid": "{{ t.amount_paid }}", "balance": "{{ t.remaining_balance }}", "created": "{{ t.created_at|date:"c" }}"}' data-created="{{ t.created_at|date:"U" }}">
+                            <td class="border-b px-6 py-4 text-sm">{{ t.date }}</td>
+                            <td class="border-b px-6 py-4 text-sm">{{ t.time }}</td>
+                            <td class="border-b px-6 py-4 text-sm">{{ t.name }}</td>
+                            <td class="border-b px-6 py-4 text-sm truncate max-w-xs">{{ t.comment|truncatewords:10 }}</td>
+                            <td class="border-b px-6 py-4 text-sm">{{ t.amount_received }}</td>
+                            <td class="border-b px-6 py-4 text-sm">{{ t.amount_paid }}</td>
+                            <td class="border-b px-6 py-4 text-sm balance-amount">{{ t.remaining_balance }}</td>
+                            <td class="border-b px-6 py-4 text-sm">
+                                <div class="flex space-x-2">
+                                    <button class="details-btn bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition duration-200 text-xs flex items-center" data-details='{"id": "{{ t.id }}", "date": "{{ t.date }}", "time": "{{ t.time }}", "name": "{{ t.name }}", "comment": "{{ t.comment }}", "received": "{{ t.amount_received }}", "paid": "{{ t.amount_paid }}", "balance": "{{ t.remaining_balance }}"}'>
+                                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16" class="mr-1">
+                                            <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+                                            <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.520 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .520 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.520l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.520l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .520-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.520-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.520l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+                                        </svg>
+                                        Details
+                                    </button>
+                                    <button class="delete-btn bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition duration-200 text-xs flex items-center" data-id="{{ t.id }}" data-created="{{ t.created_at|date:"U" }}">
+                                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16" class="mr-1">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                                        </svg>
+                                        <span class="time-remaining">Del</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+    
+
+    <!-- Footer -->
+    <footer class="bg-navy-900 text-ivory-100 text-center py-4 mt-auto">
+        <p class="text-sm tracking-wide">
+            © All Rights Reserved | Crafted by 
+        <a href="https://www.instagram.com/bye_zshan?igsh=a3VxcDNpZHVjZXF5&utm_source=qr" target="_blank" class="font-medium text-blue-500 hover:underline">
+            Zshan
+        </a>
+        </p>
+    </footer>
+
+</div>
+
+<!-- Add Transaction Modal - WHITE BACKGROUND -->
+<div id="add-modal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+    <div class="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl">
+        <h2 class="text-2xl font-semibold text-black mb-6 tracking-wide border-b border-gray-200 pb-3">Add Transaction</h2>
+        <form method="POST" id="add-form">
+            {% csrf_token %}
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-black font-medium mb-2 text-sm tracking-wide">Name</label>
+                    <input type="text" name="name" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 placeholder:text-gray-400" required>
+                </div>
+                <div>
+                    <label class="block text-black font-medium mb-2 text-sm tracking-wide">Comment</label>
+                    <textarea name="comment" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 placeholder:text-gray-400" rows="3"></textarea>
+                </div>
+                <div>
+                    <label class="block text-black font-medium mb-2 text-sm tracking-wide">Received Amount</label>
+                    <input type="number" name="amount_received" id="received" step="0.01" min="0" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 placeholder:text-gray-400" placeholder="0.00">
+                </div>
+                <div>
+                    <label class="block text-black font-medium mb-2 text-sm tracking-wide">Paid Amount</label>
+                    <input type="number" name="amount_paid" id="paid" step="0.01" min="0" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 placeholder:text-gray-400" placeholder="0.00">
+                </div>
+                <button type="submit" class="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition duration-200 font-medium tracking-wide text-sm">Save</button>
+            </div>
+        </form>
+        <button id="close-add-modal" class="mt-6 w-full bg-gray-200 text-gray-800 py-3 rounded-lg hover:bg-gray-300 transition duration-200 font-medium tracking-wide text-sm">Cancel</button>
+    </div>
+</div>
+
+<!-- Details Modal -->
+<div id="details-modal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+    <div class="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl">
+        <h2 class="text-2xl font-semibold text-black mb-6 tracking-wide border-b border-gray-200 pb-3">Transaction Details</h2>
+        <div id="details-content" class="space-y-3 text-sm text-black">
+            <!-- Content will be populated by JavaScript -->
+        </div>
+        <button id="close-details-modal" class="mt-6 w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition duration-200 font-medium tracking-wide text-sm">Close</button>
+    </div>
+</div>
+
+<!-- Load CSS and JS -->
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+<script src="{% static 'js/reportGenerator.js' %}" defer></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

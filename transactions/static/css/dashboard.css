@@ -1,0 +1,87 @@
+/* static/css/dashboard.css */
+
+/* Container for calendar input */
+.calendar-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    max-width: 320px;
+    min-width: 180px;
+}
+
+/* Calendar input styling */
+#filter-calendar {
+    background: linear-gradient(90deg, #f9fafb 0%, #fff 100%);
+    padding: 0.5rem 2.5rem 0.5rem 2.5rem; /* Space for icons */
+    width: 100%;
+    border: 1px solid #d1d5db; /* navy-300 */
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    font-size: 0.95rem;
+    color: #1e293b; /* navy-700 */
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    cursor: pointer;
+    /* Remove appearance: none to allow native picker */
+}
+
+#filter-calendar:focus {
+    border-color: #facc15; /* gold-500 */
+    box-shadow: 0 0 0 3px rgba(252, 211, 77, 0.25);
+}
+
+/* Calendar icon styling */
+.calendar-icon {
+    position: absolute;
+    left: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #3b82f6; /* navy-500 */
+    font-size: 1.15rem;
+    pointer-events: none;
+    transition: color 0.2s;
+}
+
+/* Clear button styling */
+#clear-calendar {
+    position: absolute;
+    right: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0.25rem;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #6b7280; /* navy-400 */
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s;
+    font-size: 1rem;
+    z-index: 1;
+}
+
+#clear-calendar:hover,
+#clear-calendar:focus {
+    color: #1e293b; /* navy-600 */
+    background: rgba(59, 130, 246, 0.08);
+    outline: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .calendar-container {
+        max-width: 100%;
+        min-width: 120px;
+    }
+    #filter-calendar {
+        font-size: 0.9rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+    .calendar-icon,
+    #clear-calendar {
+        left: 0.5rem;
+        right: 0.5rem;
+        font-size: 1rem;
+    }
+}
