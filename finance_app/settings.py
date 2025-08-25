@@ -28,13 +28,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-# Hosts and CSRF for Railway and local
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+# Hosts and CSRF for Railway and local (resolved)
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'Expense-Manager.up.railway.app']
 railway_host = os.getenv('RAILWAY_PUBLIC_DOMAIN') or os.getenv('RAILWAY_URL')
 if railway_host:
-    # Accept both raw host and full URL
     host_only = railway_host.replace('https://', '').replace('http://', '')
-    ALLOWED_HOSTS.append(host_only)
+    if host_only not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(host_only)
 ALLOWED_HOSTS.append('.railway.app')
 
 CSRF_TRUSTED_ORIGINS = []
