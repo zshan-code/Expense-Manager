@@ -141,6 +141,8 @@ def logout_view(request):
     return redirect("login")
 
 
-def root_redirect(request):
-    """Always redirect root URL to the explicit login page."""
-    return redirect("login")
+def root_view(request):
+    """Return 200 OK at root. If authenticated, go to dashboard; else show login."""
+    if request.user.is_authenticated:
+        return redirect("dashboard")
+    return render(request, "login.html")
